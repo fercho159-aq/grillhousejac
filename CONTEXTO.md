@@ -42,10 +42,10 @@ Lo pidió Carla (Maw Soluciones) por WhatsApp:
 | Dirección | Puerto San José del Cabo 58, Col. Casas Alemán, Gustavo A. Madero, 07580, CDMX |
 | Teléfono / WhatsApp | **Pendiente** |
 | Horario | **Pendiente** |
-| TikTok | **Pendiente**: no se sabe si existe |
+| TikTok | https://www.tiktok.com/@parrillajac (@parrillajac) |
 
 No inventes datos de contacto. Todos se editan en **`src/lib/site-config.ts`**. Por decisión de
-Alex, los botones de contacto (WhatsApp, Llamar, TikTok) **se muestran siempre**, aunque falte el
+Alex, los botones de contacto (WhatsApp, Llamar) **se muestran siempre**, aunque falte el
 dato: mientras esté vacío, el botón lleva a la sección `#contacto`. En cuanto llegue el dato, se
 llena ahí y todo el sitio (botones, `/links`, pie de página y datos para Google) se actualiza solo.
 
@@ -117,7 +117,8 @@ SEO:
 - [ ] Deploy en Vercel: crear el proyecto, conectar Neon (`DATABASE_URL`), definir `ADMIN_PASSWORD`
 - [ ] Conectar el dominio `grillhousejac.com.mx` en Vercel
 - [x] Dirección y ficha de Google (16 oct 2026)
-- [ ] Datos pendientes: teléfono/WhatsApp, horario y TikTok
+- [x] TikTok (16 oct 2026)
+- [ ] Datos pendientes: teléfono/WhatsApp y horario
 - [ ] Cambiar en Google Maps el nombre "La Tanga de Luiggi" a "Grill House Jac" (lo hace el dueño)
 - [ ] Menú real y fotos reales
 - [ ] Logo en mejor calidad (PNG sin fondo o vector) si el diseñador lo tiene

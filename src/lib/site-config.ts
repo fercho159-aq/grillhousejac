@@ -45,8 +45,7 @@ export const SITE = {
     facebook: "https://www.facebook.com/profile.php?id=61595077393536",
     instagram: "https://www.instagram.com/parrillajac/",
     instagramHandle: "@parrillajac",
-    /** Pending: not known yet whether the account exists. */
-    tiktok: "",
+    tiktok: "https://www.tiktok.com/@parrillajac",
   },
 } as const;
 
