@@ -89,7 +89,9 @@ Se copió la base de BarJac (commit `960e49c`) y se le cambió la marca:
 - `src/lib/content/seed.ts`: contenido inicial. **Menú y promociones vacíos**; el menú muestra
   "Estamos afinando la parrilla" hasta que se agregue el primer platillo desde `/admin/menu`.
 - Panel admin igual al de BarJac (`/admin`, contraseña en `ADMIN_PASSWORD`).
-- `/links` (tipo Linktree) y `/qr` (tarjeta imprimible; el QR apunta a `grillhousejac.com.mx/links`).
+- `/links` (tipo Linktree) y `/qr` (tarjeta imprimible). El QR apunta a `grillhousejac.com.mx/contacto`,
+  que redirige a la sección `#contacto` de la página principal (redirect en `next.config.mjs`).
+  Archivos impresos del QR: `marca/qr/`.
 - Logos: `marca/logo-grillhousejac-circulo.png` (recorte circular sin fondo), y en el sitio
   `public/images/logo-grillhousejac.{webp,png}`, `src/app/icon.png`, `apple-icon.png`,
   `favicon.ico` y `opengraph-image.jpg` (imagen al compartir en redes).

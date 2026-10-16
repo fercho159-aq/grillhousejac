@@ -3,8 +3,8 @@
 import Image from "next/image";
 import { SITE } from "@/lib/site-config";
 
-// Printable table card. The QR always points to the production /links page.
-const LINKS_URL = `${SITE.url}/links`;
+// Printable table card. The QR always points to the contact section on production.
+const LINKS_URL = `${SITE.url}/contacto`;
 const QR_SRC = `https://api.qrserver.com/v1/create-qr-code/?size=600x600&data=${encodeURIComponent(LINKS_URL)}&bgcolor=F3EEE3&color=14110F&margin=20`;
 
 export default function QRPage() {
