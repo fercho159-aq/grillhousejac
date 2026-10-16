@@ -38,8 +38,8 @@ Lo pidió Carla (Maw Soluciones) por WhatsApp:
 | Repo | https://github.com/fercho159-aq/grillhousejac |
 | Facebook | https://www.facebook.com/profile.php?id=61595077393536 |
 | Instagram | https://www.instagram.com/parrillajac/ (@parrillajac) |
-| Ubicación (Maps) | https://maps.app.goo.gl/CGaBcqYQiGLLJz7Q6 — coordenadas 19.4766019, -99.084934 |
-| Dirección escrita | **Pendiente**: pedirla al cliente |
+| Ubicación (Maps) | Ficha nueva de Grill House Jac: https://share.google/hSqN2FAPnpTB72JM1 (la vieja, "La Tanga de Luiggi", era https://maps.app.goo.gl/CGaBcqYQiGLLJz7Q6) — coordenadas 19.4766019, -99.084934 |
+| Dirección | Puerto San José del Cabo 58, Col. Casas Alemán, Gustavo A. Madero, 07580, CDMX |
 | Teléfono / WhatsApp | **Pendiente** |
 | Horario | **Pendiente** |
 | TikTok | **Pendiente**: no se sabe si existe |
@@ -114,7 +114,8 @@ SEO:
 - [x] Subido a GitHub
 - [ ] Deploy en Vercel: crear el proyecto, conectar Neon (`DATABASE_URL`), definir `ADMIN_PASSWORD`
 - [ ] Conectar el dominio `grillhousejac.com.mx` en Vercel
-- [ ] Datos pendientes: dirección escrita, teléfono/WhatsApp, horario y TikTok
+- [x] Dirección y ficha de Google (16 oct 2026)
+- [ ] Datos pendientes: teléfono/WhatsApp, horario y TikTok
 - [ ] Cambiar en Google Maps el nombre "La Tanga de Luiggi" a "Grill House Jac" (lo hace el dueño)
 - [ ] Menú real y fotos reales
 - [ ] Logo en mejor calidad (PNG sin fondo o vector) si el diseñador lo tiene

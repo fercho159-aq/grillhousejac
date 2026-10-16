@@ -35,8 +35,9 @@ export function restaurantJsonLd(content: SiteContent) {
     servesCuisine: SITE.cuisine,
     address: {
       "@type": "PostalAddress",
-      ...(SITE.address ? { streetAddress: SITE.address } : {}),
-      addressLocality: SITE.locality,
+      streetAddress: `${SITE.street}, ${SITE.neighborhood}`,
+      postalCode: SITE.postalCode,
+      addressLocality: `${SITE.borough}, ${SITE.locality}`,
       addressRegion: SITE.region,
       addressCountry: SITE.country,
     },

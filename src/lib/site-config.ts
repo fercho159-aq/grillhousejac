@@ -21,13 +21,18 @@ export const SITE = {
   ],
   cuisine: ["Parrilla", "Cortes de carne", "Steakhouse", "Barbecue texano"],
 
-  /** Street address as it should be printed. Pending from the client. */
-  address: "",
+  street: "Puerto San José del Cabo 58",
+  neighborhood: "Casas Alemán",
+  borough: "Gustavo A. Madero",
+  postalCode: "07580",
+  /** Address as printed on the site. */
+  address: "Puerto San José del Cabo 58, Col. Casas Alemán, Gustavo A. Madero, 07580",
   locality: "Ciudad de México",
   region: "CDMX",
   country: "MX",
   geo: { lat: 19.4766019, lng: -99.084934 },
-  mapsUrl: "https://maps.app.goo.gl/CGaBcqYQiGLLJz7Q6",
+  /** Share link of the Grill House Jac Google Business Profile. */
+  mapsUrl: "https://share.google/hSqN2FAPnpTB72JM1",
 
   /** Digits only with country code, e.g. "525512345678". Pending. */
   whatsapp: "",
