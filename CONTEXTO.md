@@ -23,7 +23,9 @@ Lo pidió Carla (Maw Soluciones) por WhatsApp:
 1. **Dominio `grillhousejac.com.mx`.** Se eligió este en lugar de `.com`. Ya lo compró Alex
    (14 oct 2026); falta conectarlo a Vercel.
 2. **Hacer una página "como la de BarJac"**, con menú y todo lo demás.
-3. **El menú puede estar vacío al inicio.** No inventar platillos ni precios.
+3. **El menú puede estar vacío al inicio.** No inventar platillos ni precios. El 16 oct 2026 llegó
+   el menú real (`Menú Grill House jac.xlsx`): está en `src/lib/content/seed.ts` y se carga solo en
+   la base si el menú está vacío (`importMenuIfEmpty` en `src/lib/db.ts`). Después se edita en el panel.
 4. Que la página se parezca a los colores del logo.
 5. En Google Maps el lugar todavía se llama "La Tanga de Luiggi" y hay que cambiarle el
    nombre a "Grill House Jac". Eso se hace desde el Perfil de Negocio de Google del dueño,
@@ -120,5 +122,6 @@ SEO:
 - [x] TikTok (16 oct 2026)
 - [ ] Datos pendientes: teléfono/WhatsApp y horario
 - [ ] Cambiar en Google Maps el nombre "La Tanga de Luiggi" a "Grill House Jac" (lo hace el dueño)
-- [ ] Menú real y fotos reales
+- [x] Menú real (16 oct 2026), con "Preparado de chelada +$10" en Cervezas
+- [ ] Fotos reales de platillos
 - [ ] Logo en mejor calidad (PNG sin fondo o vector) si el diseñador lo tiene

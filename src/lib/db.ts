@@ -75,14 +75,26 @@ const SCHEMA: Query[] = [
   { text: `CREATE INDEX IF NOT EXISTS menu_items_category_idx ON menu_items (category_id, sort_order)` },
 ];
 
-async function seedIfEmpty(db: Driver) {
-  const seeded = await db.query(`SELECT 1 FROM settings WHERE key = 'seeded'`);
-  if (seeded.length > 0) return;
+const MENU_IMPORT_KEY = "menu-import-2026-10-16";
 
-  const seed = buildSeedContent();
-  const { categories, items, promotions, hero } = seed;
-  // Seed ids are deterministic and inserts are idempotent, so concurrent first requests are safe.
+/**
+ * Loads the client's first menu (seed.ts) into a database that was created while the menu
+ * was still empty. It only runs once, and never when the menu already has categories, so
+ * nothing captured in the admin panel is overwritten.
+ */
+async function importMenuIfEmpty(db: Driver) {
+  const done = await db.query(`SELECT 1 FROM settings WHERE key = $1`, [MENU_IMPORT_KEY]);
+  if (done.length > 0) return;
+  const existing = await db.query(`SELECT 1 FROM menu_categories LIMIT 1`);
+  const { categories, items } = buildSeedContent();
   await db.transaction([
+    ...(existing.length > 0 ? [] : menuInserts(categories, items)),
+    { text: `INSERT INTO settings (key, value) VALUES ($1, 'true'::jsonb) ON CONFLICT (key) DO NOTHING`, params: [MENU_IMPORT_KEY] },
+  ]);
+}
+
+function menuInserts(categories: ReturnType<typeof buildSeedContent>["categories"], items: ReturnType<typeof buildSeedContent>["items"]): Query[] {
+  return [
     {
       text: `INSERT INTO menu_categories (id, parent_id, sort_order, visible, data)
              SELECT r.id, r.parent_id, r.sort_order, r.visible, r.data
@@ -101,6 +113,18 @@ async function seedIfEmpty(db: Driver) {
         id, category_id: categoryId, sort_order: sortOrder, visible, data,
       })))],
     },
+  ];
+}
+
+async function seedIfEmpty(db: Driver) {
+  const seeded = await db.query(`SELECT 1 FROM settings WHERE key = 'seeded'`);
+  if (seeded.length > 0) return;
+
+  const seed = buildSeedContent();
+  const { categories, items, promotions, hero } = seed;
+  // Seed ids are deterministic and inserts are idempotent, so concurrent first requests are safe.
+  await db.transaction([
+    ...menuInserts(categories, items),
     {
       text: `INSERT INTO promotions (id, sort_order, visible, data)
              SELECT r.id, r.sort_order, r.visible, r.data
@@ -121,6 +145,7 @@ export function getDb(): Promise<Driver> {
       const db = await createDriver();
       await db.transaction(SCHEMA);
       await seedIfEmpty(db);
+      await importMenuIfEmpty(db);
       return db;
     })().catch((err) => {
       globalForDb.__grillhousejacDb = undefined;
