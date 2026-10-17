@@ -90,6 +90,9 @@ Se copió la base de BarJac (commit `960e49c`) y se le cambió la marca:
 - `src/components/site/hero.tsx`: banner editable desde el admin, con el logo circular.
 - `src/lib/content/seed.ts`: contenido inicial. **Menú y promociones vacíos**; el menú muestra
   "Estamos afinando la parrilla" hasta que se agregue el primer platillo desde `/admin/menu`.
+- `src/components/site/promo-popup.tsx`: pop-up que aparece al abrir la página principal con la
+  promo del día (17 oct 2026: "Tacos de sirloin al 2x1, solo por hoy"). Texto y fecha límite
+  (`hasta`) se editan ahí; pasada la fecha ya no se muestra. Se muestra una vez por pestaña.
 - Panel admin igual al de BarJac (`/admin`, contraseña en `ADMIN_PASSWORD`).
 - `/links` (tipo Linktree) y `/qr` (tarjeta imprimible). El QR apunta a `grillhousejac.com.mx/contacto`,
   que redirige a la sección `#contacto` de la página principal (redirect en `next.config.mjs`).

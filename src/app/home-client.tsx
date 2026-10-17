@@ -8,6 +8,7 @@ import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/s
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Hero } from "@/components/site/hero";
 import { CONTACT_LINKS } from "@/components/site/contact-links";
+import { PromoPopup } from "@/components/site/promo-popup";
 import { SITE, isExternal, mapsEmbedSrc } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 import type { Localized, MenuCategory, MenuItem, SiteContent } from "@/lib/content/types";
@@ -179,6 +180,7 @@ export default function HomeClient({ content }: { content: SiteContent }) {
 
   return (
     <div className="flex min-h-screen flex-col bg-carbon text-hueso">
+      <PromoPopup />
       <header
         className={cn(
           "sticky top-0 z-50 w-full border-b transition-colors",
