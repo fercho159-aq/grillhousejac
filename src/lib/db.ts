@@ -116,6 +116,61 @@ function menuInserts(categories: ReturnType<typeof buildSeedContent>["categories
   ];
 }
 
+/**
+ * One-off menu changes requested by the client after the menu went live. Each runs once
+ * (tracked in settings) and only touches the dishes it names, so other edits made in the
+ * admin panel are kept. Fresh databases already get these changes from seed.ts.
+ */
+const MENU_PATCHES: { key: string; queries: () => Query[] }[] = [
+  {
+    key: "menu-patch-2026-10-29",
+    queries: () => {
+      const { categories, items } = buildSeedContent();
+      const item = (id: string) => {
+        const { categoryId, sortOrder, visible, id: _id, ...data } = items.find((i) => i.id === id)!;
+        return { categoryId, sortOrder, visible, data };
+      };
+      const addItem = (id: string): Query => {
+        const i = item(id);
+        return {
+          text: `INSERT INTO menu_items (id, category_id, sort_order, visible, data)
+                 SELECT $1, $2, $3, $4, $5::jsonb WHERE EXISTS (SELECT 1 FROM menu_categories WHERE id = $2)
+                 ON CONFLICT (id) DO NOTHING`,
+          params: [id, i.categoryId, i.sortOrder, i.visible, JSON.stringify(i.data)],
+        };
+      };
+      const tacosNote = categories.find((c) => c.id === "cat-tacos")!.note;
+      return [
+        // Alitas "Con papas": $98 → $105 (the "Solas" price is left as is).
+        {
+          text: `UPDATE menu_items SET data = jsonb_set(data, '{prices}', (
+                   SELECT jsonb_agg(CASE WHEN lower(p->'label'->>'es') = 'con papas' THEN jsonb_set(p, '{price}', '"105"') ELSE p END ORDER BY n)
+                   FROM jsonb_array_elements(data->'prices') WITH ORDINALITY AS t(p, n)))
+                 WHERE id = 'cat-snacks-item-1' AND jsonb_array_length(data->'prices') > 0`,
+        },
+        addItem("cat-para-compartir-item-6"), // Molcajete pork belly $480
+        addItem("cat-tacos-item-14"), // Queso extra $15
+        {
+          text: `UPDATE menu_categories SET data = jsonb_set(data, '{note}', $1::jsonb)
+                 WHERE id = 'cat-tacos' AND coalesce(data->'note'->>'es', '') = ''`,
+          params: [JSON.stringify(tacosNote)],
+        },
+      ];
+    },
+  },
+];
+
+async function applyMenuPatches(db: Driver) {
+  for (const patch of MENU_PATCHES) {
+    const done = await db.query(`SELECT 1 FROM settings WHERE key = $1`, [patch.key]);
+    if (done.length > 0) continue;
+    await db.transaction([
+      ...patch.queries(),
+      { text: `INSERT INTO settings (key, value) VALUES ($1, 'true'::jsonb) ON CONFLICT (key) DO NOTHING`, params: [patch.key] },
+    ]);
+  }
+}
+
 async function seedIfEmpty(db: Driver) {
   const seeded = await db.query(`SELECT 1 FROM settings WHERE key = 'seeded'`);
   if (seeded.length > 0) return;
@@ -146,6 +201,7 @@ export function getDb(): Promise<Driver> {
       await db.transaction(SCHEMA);
       await seedIfEmpty(db);
       await importMenuIfEmpty(db);
+      await applyMenuPatches(db);
       return db;
     })().catch((err) => {
       globalForDb.__grillhousejacDb = undefined;

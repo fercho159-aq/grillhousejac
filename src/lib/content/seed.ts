@@ -1,6 +1,6 @@
 // Initial content for an empty database, and the read-only fallback when no
 // database is configured. The menu comes from "Menú Grill House jac.xlsx" sent by
-// the client on 16 oct 2026; after that it is managed from the admin panel.
+// the client on 16 oct 2026 (plus the 29 oct changes); after that it is managed from the admin panel.
 import type { HeroSettings, Localized, MenuCategory, MenuItem, Price, SiteContent } from "./types";
 
 const L = (esText = "", enText = esText): Localized => ({ es: esText, en: enText });
@@ -68,7 +68,8 @@ function buildMenu() {
     ["Taco queso carne", "110 g", 48],
     ["Taco de chistorra", "1 pza - 80 g", 40],
     ["Taco de salchichón sinaloense", "1 pza - 80 g", 40],
-  ]);
+    ["Queso extra", "", 15, "Agrégalo a cualquier taco por $15 más."],
+  ], { note: L("Con queso extra +$15") });
   category("costras", "Costras", null, [
     ["Costra de queso con arrachera marinada", "80 g", 68],
     ["Costra de queso con rib eye", "80 g", 78],
@@ -89,7 +90,7 @@ function buildMenu() {
     ["Hamburguesa de arrachera", "1 pza - 110 g", [["Sola", 120], ["Con papas", 155]]],
   ]);
   category("snacks", "Snacks", null, [
-    ["Alitas", "500 g", [["Solas", 70], ["Con papas", 98]]],
+    ["Alitas", "500 g", [["Solas", 70], ["Con papas", 105]]],
     ["Boneless", "250 g", [["Solos", 88], ["Con papas", 125]]],
     ["Dedos de queso (5 pzas)", "150 g", [["Solos", 88], ["Con papas", 125]]],
   ]);
@@ -99,6 +100,7 @@ function buildMenu() {
     ["Chicharrón de rib eye", "350 g", 279],
     ["Molcajete mar y tierra", "", 348],
     ["Molcajete tierra", "", 328],
+    ["Molcajete pork belly", "", 480],
   ]);
   const bebidas = category("bebidas", "Bebidas", null, []);
   category("refrescos", "Refrescos", bebidas, [

@@ -35,7 +35,7 @@ export async function loadContent(): Promise<SiteContent> {
 }
 
 // The version part changes the cache key, so a deploy with new seeded data never serves a stale menu.
-const cachedContent = unstable_cache(loadContent, [CONTENT_TAG, "menu-2026-10-16"], { tags: [CONTENT_TAG] });
+const cachedContent = unstable_cache(loadContent, [CONTENT_TAG, "menu-2026-10-29"], { tags: [CONTENT_TAG] });
 
 /** Content for the public site. Falls back to the built-in menu if the database is unavailable. */
 export async function getSiteContent(): Promise<SiteContent> {
