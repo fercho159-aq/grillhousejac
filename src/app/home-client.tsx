@@ -86,17 +86,30 @@ function ItemCard({ item }: { item: MenuItem }) {
   );
 }
 
+/** Highlighted notice of a category (e.g. "Con queso extra +$15"); prices in the text are shown in gold. */
+function CategoryNote({ text }: { text: string }) {
+  const parts = text.split(/([+-]?\s?\$\s?[\d.,]+)/);
+  return (
+    <div className="mx-auto mb-8 flex max-w-md items-center gap-4 rounded-2xl bg-carbon px-5 py-4 shadow-lg ring-2 ring-oro">
+      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brasa" aria-hidden="true">
+        <Flame className="h-6 w-6 text-hueso" />
+      </span>
+      <p className="font-display text-lg leading-snug text-hueso sm:text-xl">
+        {parts.map((part, i) =>
+          i % 2 === 1 ? <span key={i} className="whitespace-nowrap text-2xl text-oro sm:text-3xl">{part}</span> : part,
+        )}
+      </p>
+    </div>
+  );
+}
+
 function CategoryBlock({ category, categories, items }: { category: MenuCategory; categories: MenuCategory[]; items: MenuItem[] }) {
   const own = items.filter((i) => i.categoryId === category.id).sort(byOrder);
   const children = categories.filter((c) => c.parentId === category.id).sort(byOrder);
   return (
     <div>
       {t(category.description) && <p className="mx-auto mb-6 max-w-xl text-center text-cuero">{t(category.description)}</p>}
-      {t(category.note) && (
-        <p className="mx-auto mb-6 max-w-md rounded-lg border border-oro-oscuro/40 bg-oro/10 p-3 text-center text-sm font-medium text-oro-oscuro">
-          {t(category.note)}
-        </p>
-      )}
+      {t(category.note) && <CategoryNote text={t(category.note)} />}
       {own.length > 0 && (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {own.map((item) => <ItemCard key={item.id} item={item} />)}
