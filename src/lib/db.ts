@@ -125,20 +125,7 @@ const MENU_PATCHES: { key: string; queries: () => Query[] }[] = [
   {
     key: "menu-patch-2026-10-29",
     queries: () => {
-      const { categories, items } = buildSeedContent();
-      const item = (id: string) => {
-        const { categoryId, sortOrder, visible, id: _id, ...data } = items.find((i) => i.id === id)!;
-        return { categoryId, sortOrder, visible, data };
-      };
-      const addItem = (id: string): Query => {
-        const i = item(id);
-        return {
-          text: `INSERT INTO menu_items (id, category_id, sort_order, visible, data)
-                 SELECT $1, $2, $3, $4, $5::jsonb WHERE EXISTS (SELECT 1 FROM menu_categories WHERE id = $2)
-                 ON CONFLICT (id) DO NOTHING`,
-          params: [id, i.categoryId, i.sortOrder, i.visible, JSON.stringify(i.data)],
-        };
-      };
+      const { categories } = buildSeedContent();
       const tacosNote = categories.find((c) => c.id === "cat-tacos")!.note;
       return [
         // Alitas "Con papas": $98 → $105 (the "Solas" price is left as is).
@@ -148,8 +135,8 @@ const MENU_PATCHES: { key: string; queries: () => Query[] }[] = [
                    FROM jsonb_array_elements(data->'prices') WITH ORDINALITY AS t(p, n)))
                  WHERE id = 'cat-snacks-item-1' AND jsonb_array_length(data->'prices') > 0`,
         },
-        addItem("cat-para-compartir-item-6"), // Molcajete pork belly $480
-        addItem("cat-tacos-item-14"), // Queso extra $15
+        addSeedItem("cat-para-compartir-item-6"), // Molcajete pork belly $480
+        addSeedItem("cat-tacos-item-14"), // Queso extra $15
         {
           text: `UPDATE menu_categories SET data = jsonb_set(data, '{note}', $1::jsonb)
                  WHERE id = 'cat-tacos' AND coalesce(data->'note'->>'es', '') = ''`,
@@ -158,7 +145,33 @@ const MENU_PATCHES: { key: string; queries: () => Query[] }[] = [
       ];
     },
   },
+  {
+    key: "menu-patch-2026-10-29-costillas",
+    queries: () => [
+      addSeedItem("cat-entradas-item-8"), // Tuétanos con carne $100
+      addSeedItem("cat-entradas-item-9"), // Tuétanos (3 pzas) $250
+      addSeedItem("cat-cortes-item-12"), // Costillas Texas $290
+      // Taco de costilla goes before "Queso extra", which stays last.
+      { text: `UPDATE menu_items SET sort_order = 14 WHERE id = 'cat-tacos-item-14' AND sort_order = 13` },
+      addSeedItem("cat-tacos-item-15"), // Taco de costilla $80
+      addSeedItem("cat-snacks-item-4"), // Costillas orden $90 / con papas $125
+      addSeedItem("cat-para-compartir-item-7"), // Costilla 1/2 kg $300 / 1 kg $580
+    ],
+  },
 ];
+
+/** Inserts one dish exactly as defined in seed.ts, if its category exists and it isn't there yet. */
+function addSeedItem(id: string): Query {
+  const found = buildSeedContent().items.find((i) => i.id === id);
+  if (!found) throw new Error(`Platillo ${id} no está en seed.ts`);
+  const { categoryId, sortOrder, visible, id: _id, ...data } = found;
+  return {
+    text: `INSERT INTO menu_items (id, category_id, sort_order, visible, data)
+           SELECT $1, $2, $3, $4, $5::jsonb WHERE EXISTS (SELECT 1 FROM menu_categories WHERE id = $2)
+           ON CONFLICT (id) DO NOTHING`,
+    params: [id, categoryId, sortOrder, visible, JSON.stringify(data)],
+  };
+}
 
 async function applyMenuPatches(db: Driver) {
   for (const patch of MENU_PATCHES) {

@@ -6,7 +6,8 @@ import type { HeroSettings, Localized, MenuCategory, MenuItem, Price, SiteConten
 const L = (esText = "", enText = esText): Localized => ({ es: esText, en: enText });
 const EMPTY = L();
 
-type Dish = [name: string, quantity: string, prices: number | [label: string, price: number][], description?: string];
+// Ids come from the position in each list, so new dishes are appended; `sort` places one elsewhere.
+type Dish = [name: string, quantity: string, prices: number | [label: string, price: number][], description?: string, sort?: number];
 
 const price = (p: Dish[2]): Price[] =>
   typeof p === "number" ? [{ label: EMPTY, price: String(p) }] : p.map(([label, value]) => ({ label: L(label), price: String(value) }));
@@ -21,8 +22,8 @@ function buildMenu() {
       visible: true, name: L(name), description: EMPTY, note: EMPTY, color: "yellow", childrenDisplay: "sections", ...extra,
     };
     categories.push(c);
-    dishes.forEach(([name, quantity, prices, description = ""], i) => items.push({
-      id: `${c.id}-item-${i + 1}`, categoryId: c.id, sortOrder: i, visible: true,
+    dishes.forEach(([name, quantity, prices, description = "", sort], i) => items.push({
+      id: `${c.id}-item-${i + 1}`, categoryId: c.id, sortOrder: sort ?? i, visible: true,
       name: L(name), quantity: L(quantity), description: L(description), prices: price(prices), image: null,
     }));
     return c;
@@ -36,6 +37,8 @@ function buildMenu() {
     ["Queso fundido con rib eye", "200 g + 100 g", 135],
     ["Queso fundido con New York", "200 g + 100 g", 135],
     ["Queso fundido con sirloin", "200 g + 100 g", 135],
+    ["Tuétanos con carne", "", 100],
+    ["Tuétanos (3 pzas)", "", 250],
   ]);
   category("sopas", "Sopas", null, [
     ["Sopa de tortilla", "350 g", 45, "Con chicharrón, queso panela, crema, aguacate y juliana de tortilla."],
@@ -53,6 +56,7 @@ function buildMenu() {
     ["Costillar de puerco", "400 g", 349],
     ["Pechuga a la plancha", "300 g", 145],
     ["Tomahawk (pieza completa)", "1.2 kg", 1189],
+    ["Costillas Texas", "", 290, "Con papa al horno y chiles toreados."],
   ]);
   category("tacos", "Tacos", null, [
     ["Taco de arrachera prime", "1 pza - 80 g", 53],
@@ -68,7 +72,8 @@ function buildMenu() {
     ["Taco queso carne", "110 g", 48],
     ["Taco de chistorra", "1 pza - 80 g", 40],
     ["Taco de salchichón sinaloense", "1 pza - 80 g", 40],
-    ["Queso extra", "", 15, "Agrégalo a cualquier taco por $15 más."],
+    ["Queso extra", "", 15, "Agrégalo a cualquier taco por $15 más.", 14],
+    ["Taco de costilla", "", 80, "", 13],
   ], { note: L("Con queso extra +$15") });
   category("costras", "Costras", null, [
     ["Costra de queso con arrachera marinada", "80 g", 68],
@@ -93,6 +98,7 @@ function buildMenu() {
     ["Alitas", "500 g", [["Solas", 70], ["Con papas", 105]]],
     ["Boneless", "250 g", [["Solos", 88], ["Con papas", 125]]],
     ["Dedos de queso (5 pzas)", "150 g", [["Solos", 88], ["Con papas", 125]]],
+    ["Costillas", "", [["Orden", 90], ["Con papas", 125]]],
   ]);
   category("para-compartir", "Para compartir", null, [
     ["Charola Grill House Jac", "1 kg", 580, "Chorizo argentino, pork belly, arrachera, sirloin, chistorra y salchichón."],
@@ -101,6 +107,7 @@ function buildMenu() {
     ["Molcajete mar y tierra", "", 348],
     ["Molcajete tierra", "", 328],
     ["Molcajete pork belly", "", 480],
+    ["Costilla", "", [["1/2 kg", 300], ["1 kg", 580]]],
   ]);
   const bebidas = category("bebidas", "Bebidas", null, []);
   category("refrescos", "Refrescos", bebidas, [
