@@ -158,6 +158,10 @@ const MENU_PATCHES: { key: string; queries: () => Query[] }[] = [
       addSeedItem("cat-para-compartir-item-7"), // Costilla 1/2 kg $300 / 1 kg $580
     ],
   },
+  {
+    key: "menu-patch-2026-10-30-papa",
+    queries: () => [addSeedItem("cat-entradas-item-10")], // Papa especial $170
+  },
 ];
 
 /** Inserts one dish exactly as defined in seed.ts, if its category exists and it isn't there yet. */

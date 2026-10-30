@@ -39,6 +39,7 @@ function buildMenu() {
     ["Queso fundido con sirloin", "200 g + 100 g", 135],
     ["Tuétanos con carne", "", 100],
     ["Tuétanos (3 pzas)", "", 250],
+    ["Papa especial", "", 170],
   ]);
   category("sopas", "Sopas", null, [
     ["Sopa de tortilla", "350 g", 45, "Con chicharrón, queso panela, crema, aguacate y juliana de tortilla."],
